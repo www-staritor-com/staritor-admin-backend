@@ -1,3 +1,5 @@
+pub mod config;
+
 use rocket::serde::Serialize;
 
 #[derive(Debug, Serialize)]
