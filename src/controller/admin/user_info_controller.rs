@@ -1,6 +1,5 @@
 use crate::dao;
 use crate::entity::Response;
-use log::warn;
 use rocket::serde::{json::Json, Deserialize, Serialize};
 
 #[derive(Debug, Deserialize)]
@@ -38,9 +37,9 @@ pub async fn get_user(code: &str) -> Json<Response<UserInfoResp>> {
             code: 200,
             msg: "ok".to_string(),
             data: Some(UserInfoResp {
-                code: value.code.unwrap(),
-                password: value.password.unwrap(),
-                name: value.name.unwrap(),
+                code: value.code.unwrap_or("".to_string()),
+                password: value.password.unwrap_or("".to_string()),
+                name: value.name.unwrap_or("".to_string()),
             }),
         },
     };

@@ -1671,7 +1671,6 @@ version = "0.1.0"
 dependencies = [
  "fast_log",
  "lazy_static",
- "log",
  "rbatis",
  "rbdc-mysql",
  "rbs",

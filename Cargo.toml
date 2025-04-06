@@ -5,8 +5,7 @@ edition = "2024"
 
 [dependencies]
 rocket = { version = "0.5.1", features = ["json"] }
-# logging lib
-log = "0.4.27"
+
 fast_log = "1.7.6"
 
 lazy_static = "1.5.0"
@@ -16,3 +15,4 @@ serde = "1.0.219"
 rbs = "4.5.25"
 rbatis = "4.5.50"
 rbdc-mysql = "4.5.17"
+

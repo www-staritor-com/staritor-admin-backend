@@ -32,8 +32,6 @@ pub fn rbatis_stage(config: &Option<MySQLConfig>) -> AdHoc {
 
     AdHoc::on_ignite("Rbatis Drivers", |rocket| async move {
         RB.link(MysqlDriver {}, &mysql_uri).await.unwrap();
-        let rb = Arc::new(&RB);
-
-        rocket.manage(rb)
+        rocket.manage(Arc::new(&RB))
     })
 }

@@ -13,18 +13,20 @@ mod entity;
 
 #[launch]
 fn rocket() -> _ {
-    fast_log::init(
-        fast_log::Config::new()
-            .console()
-            .chan_len(Some(100000))
-            .file_split(
-                "logs/",
-                Rolling::new(RollingType::ByDate(DateType::Day)),
-                KeepType::KeepNum(2),
-                LogPacker {},
-            ),
-    )
-    .unwrap();
+    if !cfg!(debug_assertions) {
+        fast_log::init(
+            fast_log::Config::new()
+                .console()
+                .chan_len(Some(100000))
+                .file_split(
+                    "logs/",
+                    Rolling::new(RollingType::ByDate(DateType::Day)),
+                    KeepType::KeepNum(2),
+                    LogPacker {},
+                ),
+        )
+        .unwrap();
+    }
 
     let rocket = rocket::build();
     let figment = rocket.figment();
