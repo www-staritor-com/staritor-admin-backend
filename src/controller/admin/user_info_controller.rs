@@ -1,6 +1,6 @@
 use crate::dao;
 use crate::entity::Response;
-use rocket::serde::{json::Json, Deserialize, Serialize};
+use rocket::serde::{Deserialize, Serialize, json::Json};
 
 #[derive(Debug, Deserialize)]
 #[serde(crate = "rocket::serde")]
@@ -28,20 +28,12 @@ pub async fn get_user(code: &str) -> Json<Response<UserInfoResp>> {
     });
 
     let resp = match user_info {
-        None => Response {
-            code: 404,
-            msg: "User not found".to_string(),
-            data: None,
-        },
-        Some(value) => Response {
-            code: 200,
-            msg: "ok".to_string(),
-            data: Some(UserInfoResp {
-                code: value.code.unwrap_or("".to_string()),
-                password: value.password.unwrap_or("".to_string()),
-                name: value.name.unwrap_or("".to_string()),
-            }),
-        },
+        None => Response::error(404, "User not found".to_string()),
+        Some(value) => Response::success(UserInfoResp {
+            code: value.code.unwrap_or("".to_string()),
+            password: value.password.unwrap_or("".to_string()),
+            name: value.name.unwrap_or("".to_string()),
+        }),
     };
 
     Json(resp)
@@ -51,17 +43,11 @@ pub async fn get_user(code: &str) -> Json<Response<UserInfoResp>> {
 pub async fn sign_in(req: Json<SignInReq<'_>>) -> Json<Response<UserInfoResp>> {
     let req = req.into_inner();
 
-    // select(&RB, 1).await?;
-
     let resp = UserInfoResp {
         code: req.code.to_string(),
         password: req.password.to_string(),
         name: req.name.to_string(),
     };
 
-    Json(Response {
-        code: 200,
-        msg: "ok".to_string(),
-        data: Some(resp),
-    })
+    Json(Response::success(resp))
 }
