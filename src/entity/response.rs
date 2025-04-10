@@ -32,12 +32,6 @@ impl<T> Response<T> {
     }
 }
 
-impl<T> ResponseError<T> for Response<T> {
-    fn to_response(self) -> Response<T> {
-        todo!()
-    }
-}
-
 impl<T> ResponseError<T> for ValidationErrors {
     fn to_response(self) -> Response<T> {
         Response {
