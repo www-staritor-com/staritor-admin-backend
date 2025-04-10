@@ -1,6 +1,4 @@
 #[macro_use]
-extern crate lazy_static;
-#[macro_use]
 extern crate rocket;
 
 use crate::entity::config::Config;
@@ -10,6 +8,7 @@ use fast_log::plugin::packer::LogPacker;
 mod controller;
 mod dao;
 mod entity;
+mod util;
 
 #[launch]
 fn rocket() -> _ {
@@ -35,5 +34,5 @@ fn rocket() -> _ {
 
     rocket
         .attach(controller::stage("/".to_string()))
-        .attach(dao::rbatis_stage(&config.mysql))
+        .attach(dao::sea_orm_stage(&config.mysql))
 }

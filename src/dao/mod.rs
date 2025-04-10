@@ -1,19 +1,40 @@
 use crate::entity::config::MySQLConfig;
-use rbatis::RBatis;
-use rbdc_mysql::MysqlDriver;
+use once_cell::sync::OnceCell;
 use rocket::fairing::AdHoc;
+use sea_orm::{ConnectOptions, Database, DatabaseConnection};
 use std::sync::Arc;
+use std::time::Duration;
 
 mod mapper;
 pub mod user_info_dao;
 
-// 定义全局变量
-lazy_static! {
-    // Rbatis 类型变量 RB，用于数据库查询
-    pub static ref RB: RBatis = RBatis::new();
+static DB_POOL: OnceCell<DatabaseConnection> = OnceCell::new();
+
+async fn init_db_pool(mysql_uri: &str) {
+    let mut opt = ConnectOptions::new(mysql_uri);
+    opt.max_connections(100)
+        .min_connections(5)
+        .connect_timeout(Duration::from_secs(8))
+        .acquire_timeout(Duration::from_secs(8))
+        .idle_timeout(Duration::from_secs(8))
+        .max_lifetime(Duration::from_secs(8))
+        .sqlx_logging(false);
+
+    let db = Database::connect(opt)
+        .await
+        .expect("Failed to connect to the database");
+    DB_POOL
+        .set(db)
+        .expect("Failed to set the global database connection");
 }
 
-pub fn rbatis_stage(config: &Option<MySQLConfig>) -> AdHoc {
+fn conn() -> &'static DatabaseConnection {
+    DB_POOL
+        .get()
+        .expect("Database connection is not initialized")
+}
+
+pub fn sea_orm_stage(config: &Option<MySQLConfig>) -> AdHoc {
     let mysql_uri = match config {
         None => {
             panic!("MySQL configuration is missing");
@@ -30,8 +51,8 @@ pub fn rbatis_stage(config: &Option<MySQLConfig>) -> AdHoc {
         }
     };
 
-    AdHoc::on_ignite("Rbatis Drivers", |rocket| async move {
-        RB.link(MysqlDriver {}, &mysql_uri).await.unwrap();
-        rocket.manage(Arc::new(&RB))
+    AdHoc::on_ignite("Sea-Orm Drivers", |rocket| async move {
+        init_db_pool(mysql_uri.as_str()).await;
+        rocket.manage(Arc::new(conn()))
     })
 }
