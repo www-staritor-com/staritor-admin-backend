@@ -1,5 +1,6 @@
 use rocket::fairing::AdHoc;
 
+mod resource_controller;
 mod user_info_controller;
 
 pub fn stage(prefix: String) -> AdHoc {
@@ -11,6 +12,7 @@ pub fn stage(prefix: String) -> AdHoc {
                 user_info_controller::page_user,
                 user_info_controller::sign_in,
                 user_info_controller::delete_user,
+                resource_controller::save,
             ],
         )
     })

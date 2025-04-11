@@ -8,11 +8,11 @@ use rocket::serde::json::Json;
 use validator::Validate;
 
 #[get("/user/<code>")]
-pub async fn get_user(code: &str) -> Result<Response<UserInfoResp>, BizError> {
-    let po = dao::user_info_dao::find_by_code(code).await?;
+pub async fn get_user(code: String) -> Result<Response<UserInfoResp>, BizError> {
+    let po = dao::user_info_dao::find_by_code(&code).await?;
 
     let resp = match po {
-        None => return Err(BizError::NotFound(code.to_owned())),
+        None => return Err(BizError::NotFound(code)),
         Some(v) => UserInfoResp {
             id: v.id,
             code: v.code,

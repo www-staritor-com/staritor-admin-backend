@@ -7,6 +7,7 @@ use std::time::Duration;
 
 mod mapper;
 pub mod user_info_dao;
+pub mod resource_dao;
 
 static DB_POOL: OnceCell<DatabaseConnection> = OnceCell::new();
 
