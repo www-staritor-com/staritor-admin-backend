@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate rocket;
 
-use crate::entity::config::Config;
+use crate::entity::base::config::Config;
 use fast_log::plugin::file_split::{DateType, KeepType, Rolling, RollingType};
 use fast_log::plugin::packer::LogPacker;
 
@@ -33,6 +33,6 @@ fn rocket() -> _ {
     let config: Config = figment.extract().expect("config");
 
     rocket
-        .attach(controller::stage("/".to_string()))
+        .attach(controller::stage("/".to_owned()))
         .attach(dao::sea_orm_stage(&config.mysql))
 }

@@ -1,4 +1,4 @@
-use crate::entity::config::MySQLConfig;
+use crate::entity::base::config::MySQLConfig;
 use once_cell::sync::OnceCell;
 use rocket::fairing::AdHoc;
 use sea_orm::{ConnectOptions, Database, DatabaseConnection};
