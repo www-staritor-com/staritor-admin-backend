@@ -36,12 +36,7 @@ pub async fn page(req: &PageRequest<PageReq<'_>>) -> Result<Page<UserInfoPo>, Db
         .fetch_page(page)
         .await?;
 
-    Ok(Page::new(
-        page,
-        size,
-        total.to_owned(),
-        Some(data.to_owned()),
-    ))
+    Ok(Page::new(page, size, total, Some(data)))
 }
 
 pub async fn save(code: &str, password: &str, name: &str) -> Result<UserInfoPo, DbErr> {

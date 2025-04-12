@@ -1,8 +1,8 @@
-use rocket::serde::Deserialize;
+use rocket::serde::{Deserialize, Serialize};
 use sea_orm::prelude::StringLen;
 use sea_orm::{DeriveActiveEnum, EnumIter};
 
-#[derive(Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum, Deserialize, Serialize)]
 #[serde(crate = "rocket::serde")]
 #[sea_orm(rs_type = "String", db_type = "String(StringLen::N(32))")]
 pub enum ResourceCategoryEnum {

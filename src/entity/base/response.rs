@@ -55,6 +55,15 @@ impl<T> Page<T> {
         }
     }
 
+    pub fn empty() -> Self {
+        Page {
+            page: 1,
+            size: 0,
+            total: 0,
+            data: None,
+        }
+    }
+
     pub fn replace<U>(&self, data: Option<Vec<U>>) -> Page<U> {
         Page {
             page: self.page,

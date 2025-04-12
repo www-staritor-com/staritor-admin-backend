@@ -8,11 +8,13 @@ pub fn stage(prefix: String) -> AdHoc {
         rocket.mount(
             format!("{}/{}", prefix.clone(), "admin"),
             routes![
-                user_info_controller::get_user,
-                user_info_controller::page_user,
+                user_info_controller::get,
+                user_info_controller::page,
                 user_info_controller::sign_in,
-                user_info_controller::delete_user,
-                resource_controller::save,
+                user_info_controller::delete,
+                resource_controller::save_or_update,
+                resource_controller::page,
+                resource_controller::delete,
             ],
         )
     })

@@ -4,7 +4,8 @@ use validator::Validate;
 
 #[derive(Debug, Deserialize, Validate)]
 #[serde(crate = "rocket::serde")]
-pub struct SaveReq {
+pub struct SaveOrUpdateReq {
+    pub id: Option<i64>,
     pub title: String,
     pub category: ResourceCategoryEnum,
     pub tags: Option<Vec<String>>,

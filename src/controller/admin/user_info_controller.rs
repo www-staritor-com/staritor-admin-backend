@@ -8,7 +8,7 @@ use rocket::serde::json::Json;
 use validator::Validate;
 
 #[get("/user/<code>")]
-pub async fn get_user(code: String) -> Result<Response<UserInfoResp>, BizError> {
+pub async fn get(code: String) -> Result<Response<UserInfoResp>, BizError> {
     let po = dao::user_info_dao::find_by_code(&code).await?;
 
     let resp = match po {
@@ -25,11 +25,11 @@ pub async fn get_user(code: String) -> Result<Response<UserInfoResp>, BizError> 
     Ok(Response::success(resp))
 }
 
-#[post("/user/page", data = "<page>")]
-pub async fn page_user(
-    page: Json<PageRequest<PageReq<'_>>>,
+#[post("/user/page", data = "<req>")]
+pub async fn page(
+    req: Json<PageRequest<PageReq<'_>>>,
 ) -> Result<Response<Page<UserInfoResp>>, BizError> {
-    let po = dao::user_info_dao::page(&page).await?;
+    let po = dao::user_info_dao::page(&req).await?;
 
     let data = match &po.data {
         None => None,
@@ -76,7 +76,7 @@ pub async fn sign_in(req: Json<SignInReq<'_>>) -> Result<Response<UserInfoResp>,
 }
 
 #[delete("/user/<code>")]
-pub async fn delete_user(code: &str) -> Result<Response<bool>, BizError> {
+pub async fn delete(code: &str) -> Result<Response<bool>, BizError> {
     let result = dao::user_info_dao::delete_by_code(&code).await?;
 
     Ok(Response::success(result))
