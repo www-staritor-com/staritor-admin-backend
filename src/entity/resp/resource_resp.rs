@@ -8,7 +8,7 @@ pub struct ResourceResp {
     pub id: i64,
     pub title: String,
     pub category: ResourceCategoryEnum,
-    pub tags: Option<String>,
+    pub tags: Option<Vec<String>>,
     pub url: String,
     pub sort: i32,
     pub created_datetime: NaiveDateTime,

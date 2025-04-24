@@ -18,7 +18,12 @@ pub async fn page(req: Json<PageRequest<()>>) -> Result<Response<Page<ResourceRe
                     id: v.id,
                     title: v.title.to_owned(),
                     category: v.category.to_owned(),
-                    tags: v.tags.to_owned(),
+                    tags: v.tags.to_owned().map(|x| {
+                        x.split(',')
+                            .filter(|&x| !x.is_empty())
+                            .map(|x| x.to_owned())
+                            .collect::<Vec<String>>()
+                    }),
                     url: v.url.to_owned(),
                     sort: v.sort.unwrap_or_default(),
                     created_datetime: v.created_datetime,
