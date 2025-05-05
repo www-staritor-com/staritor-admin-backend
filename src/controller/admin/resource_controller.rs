@@ -2,12 +2,12 @@ use crate::dao::resource_dao;
 use crate::entity::base::error::BizError;
 use crate::entity::base::request::PageRequest;
 use crate::entity::base::response::{Page, Response};
-use crate::entity::req::resource_req::SaveOrUpdateReq;
+use crate::entity::req::resource_req::{PageReq, SaveOrUpdateReq};
 use crate::entity::resp::resource_resp::ResourceResp;
 use rocket::serde::json::Json;
 
 #[post("/resource/page", data = "<req>")]
-pub async fn page(req: Json<PageRequest<()>>) -> Result<Response<Page<ResourceResp>>, BizError> {
+pub async fn page(req: Json<PageRequest<PageReq>>) -> Result<Response<Page<ResourceResp>>, BizError> {
     let po = resource_dao::page(&req).await?;
 
     let data = match &po.data {

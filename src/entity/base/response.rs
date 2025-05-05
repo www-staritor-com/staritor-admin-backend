@@ -46,6 +46,7 @@ pub struct Page<T> {
 }
 
 impl<T> Page<T> {
+    #[allow(unused)]
     pub fn new(page: u64, size: u64, total: u64, data: Option<Vec<T>>) -> Self {
         Page {
             page: page + 1,
@@ -55,6 +56,7 @@ impl<T> Page<T> {
         }
     }
 
+    #[allow(unused)]
     pub fn empty() -> Self {
         Page {
             page: 1,
@@ -64,6 +66,7 @@ impl<T> Page<T> {
         }
     }
 
+    #[allow(unused)]
     pub fn replace<U>(&self, data: Option<Vec<U>>) -> Page<U> {
         Page {
             page: self.page,

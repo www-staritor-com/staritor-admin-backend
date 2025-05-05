@@ -5,7 +5,7 @@ use rocket::serde::Deserialize;
 pub struct PageRequest<T> {
     page: u64,
     size: u64,
-    pub data: Option<T>,
+    pub select: Option<T>,
 }
 
 impl<T> PageRequest<T> {

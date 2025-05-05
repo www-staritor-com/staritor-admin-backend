@@ -4,15 +4,15 @@ use validator::Validate;
 
 #[derive(Debug, Deserialize, Validate)]
 #[serde(crate = "rocket::serde")]
-pub struct SignInReq<'r> {
+pub struct SignInReq {
     #[validate(regex(path = SPECIAL_CHAR_REGEX))]
-    pub code: &'r str,
-    pub password: &'r str,
-    pub name: &'r str,
+    pub code: String,
+    pub password: String,
+    pub name: String,
 }
 
 #[derive(Debug, Deserialize)]
 #[serde(crate = "rocket::serde")]
-pub struct PageReq<'r> {
-    pub fuzzy: &'r str,
+pub struct PageReq {
+    pub fuzzy: Option<String>,
 }

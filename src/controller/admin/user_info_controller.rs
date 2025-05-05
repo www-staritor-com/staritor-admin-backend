@@ -27,7 +27,7 @@ pub async fn get(code: String) -> Result<Response<UserInfoResp>, BizError> {
 
 #[post("/user/page", data = "<req>")]
 pub async fn page(
-    req: Json<PageRequest<PageReq<'_>>>,
+    req: Json<PageRequest<PageReq>>,
 ) -> Result<Response<Page<UserInfoResp>>, BizError> {
     let po = dao::user_info_dao::page(&req).await?;
 
@@ -50,7 +50,7 @@ pub async fn page(
 }
 
 #[put("/user", data = "<req>")]
-pub async fn sign_in(req: Json<SignInReq<'_>>) -> Result<Response<UserInfoResp>, BizError> {
+pub async fn sign_in(req: Json<SignInReq>) -> Result<Response<UserInfoResp>, BizError> {
     if let Err(e) = req.validate() {
         return Err(e.into());
     }

@@ -6,7 +6,8 @@ use crate::entity::base::request::PageRequest;
 use crate::entity::base::response::Page;
 use crate::entity::req::user_info_req::PageReq;
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder, Set,
+    ActiveModelTrait, ColumnTrait, Condition, DbErr, EntityTrait, PaginatorTrait, QueryFilter,
+    QueryOrder, Set,
 };
 
 pub async fn find_by_code(code: &str) -> Result<Option<UserInfoPo>, DbErr> {
@@ -17,15 +18,20 @@ pub async fn find_by_code(code: &str) -> Result<Option<UserInfoPo>, DbErr> {
         .await
 }
 
-pub async fn page(req: &PageRequest<PageReq<'_>>) -> Result<Page<UserInfoPo>, DbErr> {
+pub async fn page(req: &PageRequest<PageReq>) -> Result<Page<UserInfoPo>, DbErr> {
     let page = req.page();
     let size = req.size();
     let mut opt = UserInfoMapper::find().filter(UserInfoColumn::Deleted.eq(false));
-    if let Some(v) = &req.data {
-        if !v.fuzzy.is_empty() {
-            opt = opt
-                .filter(UserInfoColumn::Code.contains(v.fuzzy))
-                .filter(UserInfoColumn::Name.contains(v.fuzzy));
+    if let Some(v) = &req.select {
+        match v.fuzzy {
+            Some(ref v) => {
+                opt = opt.filter(
+                    Condition::any()
+                        .add(UserInfoColumn::Code.contains(v))
+                        .add(UserInfoColumn::Name.contains(v)),
+                );
+            }
+            None => {}
         }
     }
 

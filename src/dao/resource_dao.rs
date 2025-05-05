@@ -5,14 +5,34 @@ use crate::dao::mapper::prelude::{
 use crate::entity::base::request::PageRequest;
 use crate::entity::base::response::Page;
 use crate::entity::r#enum::ResourceCategoryEnum;
+use crate::entity::req::resource_req::PageReq;
 use rocket::serde::json::Json;
-use sea_orm::{ActiveModelTrait, DbErr, EntityTrait, Set};
+use sea_orm::{ActiveModelTrait, ColumnTrait, Condition, DbErr, EntityTrait, QueryFilter, Set};
 use sea_orm::{PaginatorTrait, QueryOrder};
 
-pub async fn page(req: &Json<PageRequest<()>>) -> Result<Page<ResourcePo>, DbErr> {
+pub async fn page(req: &Json<PageRequest<PageReq>>) -> Result<Page<ResourcePo>, DbErr> {
     let page = req.page();
     let size = req.size();
-    let opt = ResourceMapper::find();
+    let mut opt = ResourceMapper::find();
+
+    if let Some(v) = &req.select {
+        match v.fuzzy {
+            Some(ref v) => {
+                opt = opt.filter(
+                    Condition::any()
+                        .add(ResourceColumn::Title.contains(v))
+                        .add(ResourceColumn::Tags.contains(format!(",{}", v))),
+                );
+            }
+            None => {}
+        }
+        match v.category {
+            Some(ref v) => {
+                opt = opt.filter(ResourceColumn::Category.eq(v.to_owned()));
+            }
+            None => {}
+        }
+    }
 
     let total = opt.clone().count(dao::conn()).await?;
     let data = opt

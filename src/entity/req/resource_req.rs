@@ -12,3 +12,10 @@ pub struct SaveOrUpdateReq {
     pub url: String,
     pub sort: Option<i32>,
 }
+
+#[derive(Debug, Deserialize)]
+#[serde(crate = "rocket::serde")]
+pub struct PageReq {
+    pub fuzzy: Option<String>,
+    pub category: Option<ResourceCategoryEnum>,
+}
