@@ -1,5 +1,5 @@
 [package]
-name = "rocket-test"
+name = "staritor-admin-backend"
 version = "0.1.0"
 edition = "2024"
 
@@ -27,3 +27,12 @@ default = ["sqlx-mysql", "sea-orm/with-chrono", "sea-orm/with-json"]
 sqlx-mysql = ["sea-orm/sqlx-mysql"]
 sqlx-postgres = ["sea-orm/sqlx-postgres"]
 sqlx-sqlite = ["sea-orm/sqlx-sqlite"]
+
+[source.crates-io]
+replace-with = 'ustc'
+[source.ustc]
+registry = "git://mirrors.ustc.edu.cn/crates.io-index"
+
+#[target.x86_64-unknown-linux-musl]
+#linker = "x86_64-linux-musl-gcc"
+#rustflags = ["-C", "target-feature=+crt-static"]

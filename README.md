@@ -6,5 +6,5 @@ ASSETS=("Rocket.toml")
 ```
 ### 2. 启动服务
 ```shell
-./rocket-test
+./staritor-admin-backend
 ```
